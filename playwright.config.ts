@@ -3,11 +3,7 @@
 export default defineConfig({
   testDir: "./tests",
   tsconfig: "./tsconfig.json",
-  testMatch: [
-    "**/users/**/*.spec.ts",
-    "**/products/**/*.spec.ts",
-    "**/results/**/*.spec.ts",
-  ],
+  testMatch: ["**/smoke/**/*.spec.ts", "**/regression/**/*.spec.ts"],
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
