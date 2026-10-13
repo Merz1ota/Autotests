@@ -39,8 +39,6 @@ export class ProductsPage {
     name: string,
     price: string,
   ): Promise<void> {
-    console.log(name);
-
     await this.nameInputs.nth(index).fill(name);
     await this.priceInputs.nth(index).fill(price);
   }
