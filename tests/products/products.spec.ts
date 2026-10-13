@@ -1,4 +1,5 @@
 ﻿import { expect, test } from "@playwright/test";
+import { ProductsPage } from "@/pages/ProductsPage";
 import {
   addParticipants,
   addProduct,
@@ -14,27 +15,24 @@ test.beforeEach(async ({ page }) => {
 test("проверяет обязательные поля и запрещает дубли названий продуктов", async ({
   page,
 }) => {
-  await page.getByRole("button", { name: "Добавить позицию" }).click();
-  const nextButton = page.getByRole("button", {
-    name: "Перейти к результатам",
-  });
-  await expect(nextButton).toBeDisabled();
+  const productsPage = new ProductsPage(page);
+  await productsPage.addBlankProduct();
+  await expect(productsPage.continueButton).toBeDisabled();
 
-  await page.getByRole("textbox", { name: "Название" }).fill("Пицца");
-  await page.getByRole("spinbutton", { name: "Цена" }).fill("0");
-  await expect(nextButton).toBeDisabled();
+  await productsPage.fillProductFields(0, "Пицца", "0");
+  await expect(productsPage.continueButton).toBeDisabled();
 
-  await page.getByRole("spinbutton", { name: "Цена" }).fill("900");
-  await expect(nextButton).toBeEnabled();
-  await page.getByRole("button", { name: "Добавить позицию" }).click();
-  await page.getByRole("textbox", { name: "Название" }).nth(1).fill("пицца");
-  await page.getByRole("spinbutton", { name: "Цена" }).nth(1).fill("100");
-  await expect(nextButton).toBeDisabled();
+  await productsPage.fillProductFields(0, "Пицца", "900");
+  await expect(productsPage.continueButton).toBeEnabled();
+  await productsPage.addBlankProduct();
+  await productsPage.fillProductFields(1, "пицца", "100");
+  await expect(productsPage.continueButton).toBeDisabled();
 });
 
-test("считает общую сумму с сохранением плательщика и потребителей позиций продуктов (кто что ел)", async ({
+test("считает общую сумму с сохранением плательщика и потребителей продуктов", async ({
   page,
 }) => {
+  const productsPage = new ProductsPage(page);
   await addProduct(page, {
     name: "Пицца",
     price: 900,
@@ -42,8 +40,8 @@ test("считает общую сумму с сохранением плате�
     eaters: ["Илья", "Лиза"],
   });
 
-  await expect(page.getByText("Общий счет: 900")).toBeVisible();
-  await page.getByRole("button", { name: "Перейти к результатам" }).click();
+  await expect(productsPage.totalText(900)).toBeVisible();
+  await productsPage.continueToResults();
   await expect
     .poll(() => readStoredProducts(page))
     .toEqual([
@@ -63,20 +61,17 @@ test("считает общую сумму с сохранением плате�
 test("удаляет продукт из списка и пересчитывает общий счет", async ({
   page,
 }) => {
+  const productsPage = new ProductsPage(page);
   await addProduct(page, {
     name: "Кофе",
     price: 250,
     payer: "Лиза",
     eaters: ["Лиза"],
   });
-  await expect(page.getByText("Общий счет: 250")).toBeVisible();
+  await expect(productsPage.totalText(250)).toBeVisible();
 
-  await page
-    .locator("button", { has: page.locator(".mdi-window-close") })
-    .click();
+  await productsPage.removeProductByIdx(0);
 
-  await expect(page.getByText("Общий счет: 0")).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: "Перейти к результатам" }),
-  ).toHaveCount(0);
+  await expect(productsPage.totalText(0)).toBeVisible();
+  await expect(productsPage.continueButton).toHaveCount(0);
 });

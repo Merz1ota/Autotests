@@ -1,5 +1,8 @@
 ﻿import { expect } from "@playwright/test";
 import type { Page } from "@playwright/test";
+import { ProductsPage } from "@/pages/ProductsPage";
+import { UsersPage } from "@/pages/UsersPage";
+import type { ProductInput } from "@/pages/types";
 
 export type StoredUser = {
   id: number;
@@ -14,13 +17,6 @@ export type StoredProduct = {
   usersAte: StoredUser[];
 };
 
-export type ProductInput = {
-  name: string;
-  price: number;
-  payer: string;
-  eaters: string[];
-};
-
 export const resetApplication = async (page: Page): Promise<void> => {
   await page.goto("");
   await page.evaluate(() => localStorage.clear());
@@ -28,14 +24,14 @@ export const resetApplication = async (page: Page): Promise<void> => {
 };
 
 export const addUser = async (page: Page, name: string): Promise<void> => {
-  await page.getByRole("button", { name: "Добавить пользователя" }).click();
-  await page.getByRole("textbox", { name: /Имя/ }).last().fill(name);
+  await new UsersPage(page).addParticipant(name);
 };
 
 export const addParticipants = async (page: Page): Promise<void> => {
-  await addUser(page, "Илья");
-  await addUser(page, "Лиза");
-  await page.getByRole("button", { name: "Сохранить" }).click();
+  const usersPage = new UsersPage(page);
+  await usersPage.addParticipant("Илья");
+  await usersPage.addParticipant("Лиза");
+  await usersPage.saveParticipants();
   await expect(page).toHaveURL(/\/products$/);
 };
 
@@ -43,31 +39,7 @@ export const addProduct = async (
   page: Page,
   product: ProductInput,
 ): Promise<void> => {
-  await page.getByRole("button", { name: "Добавить позицию" }).click();
-  await page
-    .getByRole("textbox", { name: /Название/ })
-    .last()
-    .fill(product.name);
-  await page
-    .getByRole("spinbutton", { name: /Цена/ })
-    .last()
-    .fill(String(product.price));
-
-  await page
-    .getByRole("button")
-    .filter({ has: page.locator(".mdi-chevron-down") })
-    .last()
-    .click();
-
-  await page.getByRole("combobox").last().click();
-  await page.getByRole("option", { name: product.payer, exact: true }).click();
-
-  for (const eater of product.eaters) {
-    await page
-      .getByRole("checkbox", { name: eater, exact: true })
-      .last()
-      .check();
-  }
+  await new ProductsPage(page).addProduct(product);
 };
 
 export const readStoredUsers = (page: Page): Promise<StoredUser[] | null> =>
@@ -83,6 +55,6 @@ export const readStoredProducts = (
   );
 
 export const openResults = async (page: Page): Promise<void> => {
-  await page.getByRole("button", { name: "Перейти к результатам" }).click();
+  await new ProductsPage(page).continueToResults();
   await expect(page).toHaveURL(/\/results$/);
 };

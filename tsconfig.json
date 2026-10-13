@@ -12,5 +12,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["playwright.config.ts", "tests/**/*.ts", "utils/index.ts"]
+  "include": ["playwright.config.ts", "tests/**/*.ts", "pages/**/*.ts", "utils/index.ts"]
 }
+
