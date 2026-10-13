@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "playwright test",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:regression": "playwright test --grep @regression",
+    "test:critical": "playwright test --grep @critical"
   },
   "keywords": [],
   "author": "",

@@ -35,7 +35,7 @@ jobs:
       - name: Check TypeScript types
         run: npm run typecheck
 
-      - name: Run Playwright tests
+      - name: Run full Smoke and Regression suites
         run: npm test
 
       - name: Upload Playwright report
