@@ -1,5 +1,9 @@
 ﻿import { defineConfig, devices } from "@playwright/test";
 
+const SITES = {
+  splitBillCafe: "https://merz1ota.github.io/split_bill_cafe/",
+} as const;
+
 export default defineConfig({
   testDir: "./tests",
   tsconfig: "./tsconfig.json",
@@ -13,9 +17,15 @@ export default defineConfig({
     ["html", { outputFolder: "playwright-report", open: "never" }],
   ],
   use: {
-    baseURL: "https://merz1ota.github.io/split_bill_cafe/",
     trace: "retain-on-failure",
     ...devices["Desktop Chrome"],
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+
+  projects: Object.entries(SITES).map(([siteName, siteUrl]) => ({
+    name: siteName,
+    use: {
+      baseURL: siteUrl,
+      ...devices["Desktop Chrome"],
+    },
+  })),
 });

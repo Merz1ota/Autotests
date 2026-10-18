@@ -1,5 +1,5 @@
-﻿import { expect, test } from "@playwright/test";
-import { ProductsPage } from "@/pages/ProductsPage";
+﻿import { expect, test } from "@/fixtures/splitBillCafe";
+
 import {
   addParticipants,
   addProduct,
@@ -14,9 +14,8 @@ test.describe("Regression - Products", { tag: "@regression" }, () => {
   });
 
   test("проверяет обязательные поля и запрещает дубли названий продуктов", async ({
-    page,
+    productsPage,
   }) => {
-    const productsPage = new ProductsPage(page);
     await productsPage.addBlankProduct();
     await expect(productsPage.continueButton).toBeDisabled();
 
@@ -31,9 +30,8 @@ test.describe("Regression - Products", { tag: "@regression" }, () => {
   });
 
   test("отклоняет нулевую и отрицательную цену, принимает минимальную положительную", async ({
-    page,
+    productsPage,
   }) => {
-    const productsPage = new ProductsPage(page);
     await productsPage.addBlankProduct();
 
     await productsPage.fillProductFields(0, "Кофе", "0");
@@ -47,9 +45,9 @@ test.describe("Regression - Products", { tag: "@regression" }, () => {
   });
 
   test("считает общую сумму с сохранением плательщика и потребителей продуктов", async ({
+    productsPage,
     page,
   }) => {
-    const productsPage = new ProductsPage(page);
     await addProduct(page, {
       name: "Пицца",
       price: 900,
@@ -76,9 +74,9 @@ test.describe("Regression - Products", { tag: "@regression" }, () => {
   });
 
   test("удаляет продукт из списка и пересчитывает общий счет", async ({
+    productsPage,
     page,
   }) => {
-    const productsPage = new ProductsPage(page);
     await addProduct(page, {
       name: "Кофе",
       price: 250,

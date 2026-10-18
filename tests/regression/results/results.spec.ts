@@ -1,5 +1,5 @@
-﻿import { expect, test } from "@playwright/test";
-import { ResultsPage } from "@/pages/ResultsPage";
+﻿import { expect, test } from "@/fixtures/splitBillCafe";
+
 import {
   addParticipants,
   addProduct,
@@ -14,9 +14,9 @@ test.describe("Regression - Results", { tag: "@regression" }, () => {
   });
 
   test("делит общую позицию между участниками и сбрасывает счет", async ({
+    resultsPage,
     page,
   }) => {
-    const resultsPage = new ResultsPage(page);
     await addProduct(page, {
       name: "Пицца",
       price: 900,
@@ -35,9 +35,9 @@ test.describe("Regression - Results", { tag: "@regression" }, () => {
   });
 
   test("не создает долг, если позицию оплатил единственный участник, который ее ел", async ({
+    resultsPage,
     page,
   }) => {
-    const resultsPage = new ResultsPage(page);
     await addProduct(page, {
       name: "Кофе",
       price: 250,
@@ -48,8 +48,7 @@ test.describe("Regression - Results", { tag: "@regression" }, () => {
     await expect(resultsPage.cells).toHaveCount(0);
   });
 
-  test("округляет долю 5,045 до 5,0", async ({ page }) => {
-    const resultsPage = new ResultsPage(page);
+  test("округляет долю 5,045 до 5,0", async ({ resultsPage, page }) => {
     await addProduct(page, {
       name: "Пицца",
       price: 10.09,
@@ -64,9 +63,9 @@ test.describe("Regression - Results", { tag: "@regression" }, () => {
   });
 
   test("округляет половину десятой вверх: доля 5,05 отображается как 5,1", async ({
+    resultsPage,
     page,
   }) => {
-    const resultsPage = new ResultsPage(page);
     await addProduct(page, {
       name: "Пицца",
       price: 10.1,
@@ -80,8 +79,10 @@ test.describe("Regression - Results", { tag: "@regression" }, () => {
     ).toHaveText("5.1");
   });
 
-  test("взаимно засчитывает долги участников", async ({ page }) => {
-    const resultsPage = new ResultsPage(page);
+  test("взаимно засчитывает долги участников", async ({
+    resultsPage,
+    page,
+  }) => {
     await addProduct(page, {
       name: "Пицца",
       price: 100,
@@ -102,10 +103,10 @@ test.describe("Regression - Results", { tag: "@regression" }, () => {
   });
 
   test("BUG-001: скрывает нулевую строку после взаимозачета", async ({
+    resultsPage,
     page,
   }) => {
     test.fail(true, "BUG-001: приложение отображает строку с нулевым долгом");
-    const resultsPage = new ResultsPage(page);
     await addProduct(page, {
       name: "Пицца",
       price: 100,
