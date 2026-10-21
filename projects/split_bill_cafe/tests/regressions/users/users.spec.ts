@@ -1,6 +1,6 @@
-﻿import { expect, test } from "@playwright/test";
-import { UsersPage } from "@/pages/UsersPage";
-import { readStoredUsers, resetApplication } from "@/utils";
+﻿import { expect, test } from "@split-bill-cafe/fixtures";
+import { readStoredUsers } from "@split-bill-cafe/utils";
+import { resetApplication } from "@common";
 
 test.describe("Regression - Users", { tag: "@regression" }, () => {
   test.beforeEach(async ({ page }) => {
@@ -8,9 +8,9 @@ test.describe("Regression - Users", { tag: "@regression" }, () => {
   });
 
   test("сохраняет участников и восстанавливает их после перехода на главную страницу", async ({
+    usersPage,
     page,
   }) => {
-    const usersPage = new UsersPage(page);
     await usersPage.addParticipant("Илья");
     await usersPage.addParticipant("Лиза");
     await usersPage.saveParticipants();
@@ -29,9 +29,8 @@ test.describe("Regression - Users", { tag: "@regression" }, () => {
   });
 
   test("запрещает пустые и повторяющиеся имена без учета регистра", async ({
-    page,
+    usersPage,
   }) => {
-    const usersPage = new UsersPage(page);
     await usersPage.addParticipant();
     await expect(usersPage.saveButton).toBeDisabled();
 
@@ -42,9 +41,8 @@ test.describe("Regression - Users", { tag: "@regression" }, () => {
   });
 
   test("удаляет участника из списка перед тем как продолжить", async ({
-    page,
+    usersPage,
   }) => {
-    const usersPage = new UsersPage(page);
     await usersPage.addParticipant("Илья");
     await usersPage.addParticipant("Лиза");
     await usersPage.removeParticipantAt(0);

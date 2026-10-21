@@ -1,5 +1,5 @@
 ﻿import type { Locator, Page } from "@playwright/test";
-import type { ProductInput } from "@/pages/types";
+import type { ProductInput } from "./types";
 
 export class ProductsPage {
   constructor(private readonly page: Page) {}
