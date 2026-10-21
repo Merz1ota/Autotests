@@ -1,5 +1,6 @@
-﻿import { expect, test } from "@/fixtures/splitBillCafe";
-import { readStoredUsers, resetApplication } from "@/utils";
+﻿import { expect, test } from "@split-bill-cafe/fixtures";
+import { readStoredUsers } from "@split-bill-cafe/utils";
+import { resetApplication } from "@common";
 
 test.describe("Regression - Users", { tag: "@regression" }, () => {
   test.beforeEach(async ({ page }) => {

@@ -1,11 +1,10 @@
-﻿import { expect, test } from "@/fixtures/splitBillCafe";
-
+﻿import { expect, test } from "@split-bill-cafe/fixtures";
 import {
   addParticipants,
   addProduct,
   openResults,
-  resetApplication,
-} from "@/utils";
+} from "@split-bill-cafe/utils";
+import { resetApplication } from "@common";
 
 test.describe("Regression - Results", { tag: "@regression" }, () => {
   test.beforeEach(async ({ page }) => {

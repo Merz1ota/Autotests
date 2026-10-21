@@ -1,8 +1,7 @@
-﻿import { expect } from "@playwright/test";
-import type { Page } from "@playwright/test";
-import { ProductsPage } from "@/pages/ProductsPage";
-import { UsersPage } from "@/pages/UsersPage";
-import type { ProductInput } from "@/pages/types";
+import { expect, Page } from "@playwright/test";
+import { ProductsPage } from "@split-bill-cafe/pages/ProductsPage";
+import { ProductInput } from "@split-bill-cafe/pages/types";
+import { UsersPage } from "@split-bill-cafe/pages/UsersPage";
 
 export type StoredUser = {
   id: number;
@@ -15,12 +14,6 @@ export type StoredProduct = {
   price: string;
   userPayer: string;
   usersAte: StoredUser[];
-};
-
-export const resetApplication = async (page: Page): Promise<void> => {
-  await page.goto("");
-  await page.evaluate(() => localStorage.clear());
-  await page.reload();
 };
 
 export const addUser = async (page: Page, name: string): Promise<void> => {

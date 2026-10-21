@@ -1,5 +1,6 @@
-﻿import { addProduct, resetApplication } from "@/utils";
-import { test, expect } from "@/fixtures/splitBillCafe";
+﻿import { resetApplication } from "@common";
+import { addProduct } from "@split-bill-cafe/utils";
+import { test, expect } from "@split-bill-cafe/fixtures";
 
 test(
   "Проходит полный сценарий разделения счета",

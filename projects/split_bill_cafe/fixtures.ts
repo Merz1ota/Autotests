@@ -1,7 +1,7 @@
 import { test as base } from "@playwright/test";
-import { ProductsPage } from "../pages/ProductsPage";
-import { ResultsPage } from "../pages/ResultsPage";
-import { UsersPage } from "../pages/UsersPage";
+import { ProductsPage } from "@split-bill-cafe/pages/ProductsPage";
+import { ResultsPage } from "@split-bill-cafe/pages/ResultsPage";
+import { UsersPage } from "@split-bill-cafe/pages/UsersPage";
 
 interface PageFixtures {
   productsPage: ProductsPage;

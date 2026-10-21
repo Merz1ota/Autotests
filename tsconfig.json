@@ -10,13 +10,23 @@
     "types": ["node"],
 
     "paths": {
-      "@/*": ["./*"]
+      "@common": ["./common/index.ts"],
+      "@split-bill-cafe/*": ["./projects/split_bill_cafe/*"],
+      "@healthy-lifestyle/*": ["./projects/healthy_lifestyle/*"]
     }
   },
   "include": [
     "playwright.config.ts",
     "tests/**/*.ts",
     "pages/**/*.ts",
-    "utils/index.ts"
+    "common/index.ts",
+    "projects/split_bill_cafe/pages/ProductsPage.ts",
+    "projects/split_bill_cafe/pages/ResultsPage.ts",
+    "projects/split_bill_cafe/pages/types.ts",
+    "projects/split_bill_cafe/pages/UsersPage.ts",
+    "projects/healthy_lifestyle/pages/MainPage.ts",
+    "projects/healthy_lifestyle/tests/smoke/critical-flow.spec.ts",
+    "projects/split_bill_cafe/tests/smoke/critical-flow.spec.ts",
+    "projects/**/*.ts"
   ]
 }
